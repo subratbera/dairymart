@@ -1,20 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './Home.css';
 
+const fallbackRecommendations = [
+  { id: 1, name: 'Fresh Whole Milk (1L)', price: 68.00, image_url: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500&q=80', category: 'Milk' },
+  { id: 2, name: 'Artisan Cheddar Cheese (200g)', price: 250.00, image_url: 'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=500&q=80', category: 'Cheese' },
+  { id: 3, name: 'Organic Greek Yogurt (500g)', price: 180.00, image_url: 'https://images.unsplash.com/photo-1488477181946-8968c7634416?w=500&q=80', category: 'Yogurt' },
+  { id: 8, name: 'Desi Ghee (1L)', price: 650.00, image_url: 'https://images.unsplash.com/photo-1614282367448-f68746c82092?w=500&q=80', category: 'Butter' }
+];
+
 const Home = () => {
   const [recommendations, setRecommendations] = useState([]);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
   const { addToCart } = useCart();
 
   useEffect(() => {
-    // Fetch dummy recommendations from our Flask API
+    // Fetch recommendations from our Flask API
     axios.get('http://127.0.0.1:5000/api/ai/recommendations')
-      .then(res => setRecommendations(res.data.recommendations))
-      .catch(err => console.error(err));
+      .then(res => {
+        if (res.data && res.data.recommendations && res.data.recommendations.length > 0) {
+          setRecommendations(res.data.recommendations);
+        } else {
+          setRecommendations(fallbackRecommendations);
+        }
+      })
+      .catch(err => {
+        console.warn('AI recommendations service offline. Running in demo mode with local recommendations.');
+        setRecommendations(fallbackRecommendations);
+      });
   }, []);
+
+  const triggerToast = (message) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    triggerToast(`Added ${product.name} to cart!`);
+  };
 
   return (
     <div className="home-container animate-fade-in">
@@ -86,7 +117,7 @@ const Home = () => {
                 <div className="card-body">
                   <h3 className="product-name">{product.name}</h3>
                   <p className="product-price">₹{product.price.toFixed(2)}</p>
-                  <button className="btn btn-primary w-full" onClick={() => addToCart(product)}>Add to Cart</button>
+                  <button className="btn btn-primary w-full" onClick={() => handleAddToCart(product)}>Add to Cart</button>
                 </div>
               </div>
             ))
@@ -102,6 +133,16 @@ const Home = () => {
           )}
         </div>
       </section>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="toast-notification glass flex-center animate-fade-in">
+          <div className="toast-icon-wrapper flex-center">
+            <Check size={16} />
+          </div>
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 };

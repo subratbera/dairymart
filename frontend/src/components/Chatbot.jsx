@@ -22,7 +22,24 @@ const Chatbot = () => {
       const res = await axios.post('http://127.0.0.1:5000/api/chat', { message: input });
       setMessages(prev => [...prev, { text: res.data.response, isBot: true }]);
     } catch (err) {
-      setMessages(prev => [...prev, { text: "Sorry, I'm having trouble connecting to the server.", isBot: true }]);
+      console.warn("Backend chat service offline. Using local intelligent helper.");
+      
+      const query = input.toLowerCase().trim();
+      let reply = "I'm currently running in offline demo mode, but I'd love to help! Ask me about our products, delivery times, or discount codes.";
+      
+      if (query.includes('hi') || query.includes('hello') || query.includes('hey') || query.includes('greet')) {
+        reply = "Hi there! Welcome to DairyMart! 🥛 I'm operating in Interactive Demo Mode since my backend is offline, but I can still help you explore our fresh items. How can I help you today?";
+      } else if (query.includes('price') || query.includes('product') || query.includes('sell') || query.includes('shop') || query.includes('buy') || query.includes('item')) {
+        reply = "We offer farm-fresh dairy products: Whole Milk (₹68), Cheddar Cheese (₹250), Greek Yogurt (₹180), Salted Butter (₹280), Paneer (₹120), and Desi Ghee (₹650). You can search for them and add them to your cart directly from the Shop page!";
+      } else if (query.includes('delivery') || query.includes('ship') || query.includes('order')) {
+        reply = "We deliver farm-fresh products directly to your doorstep in under 24 hours to ensure they stay perfectly cold and fresh!";
+      } else if (query.includes('discount') || query.includes('offer') || query.includes('promo') || query.includes('coupon') || query.includes('deal')) {
+        reply = "You can use coupon code **FRESH15** during checkout for an instant 15% off your first purchase! 🏷️";
+      } else if (query.includes('pay') || query.includes('cash') || query.includes('card') || query.includes('upi')) {
+        reply = "We support UPI, Netbanking, and Card payments in production. In this offline demo, you can complete checkout using Cash on Delivery (COD) to test the order system!";
+      }
+      
+      setMessages(prev => [...prev, { text: reply, isBot: true }]);
     }
   };
 
