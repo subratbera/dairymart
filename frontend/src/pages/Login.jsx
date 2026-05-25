@@ -49,7 +49,23 @@ const Login = () => {
         navigate('/');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please check credentials.');
+      if (err.message === "Network Error" || !err.response) {
+        console.warn("Backend server offline. Logging in with Demo Credentials.");
+        
+        // Success fallback for Demo Mode!
+        localStorage.setItem('token', 'demo-token-12345');
+        localStorage.setItem('role', loginMode === 'admin' ? 'admin' : 'customer');
+        localStorage.setItem('username', username || (loginMode === 'admin' ? 'admin' : 'DemoUser'));
+        window.dispatchEvent(new Event('storage'));
+        
+        if (loginMode === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setError(err.response?.data?.message || 'Login failed. Please check credentials.');
+      }
     } finally {
       setIsLoading(false);
     }
