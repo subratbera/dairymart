@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Download, Brain, TrendingUp, AlertTriangle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { API_BASE_URL } from '../../config';
 
 const AnalyticsView = () => {
   const [demandData, setDemandData] = useState([]);
@@ -11,7 +12,7 @@ const AnalyticsView = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://127.0.0.1:5000/api/ai/product-demand', {
+        const res = await axios.get(`${API_BASE_URL}/api/ai/product-demand`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const formattedData = res.data.map(item => ({

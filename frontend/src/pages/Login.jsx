@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Milk, ArrowRight, ShieldCheck, User } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Auth.css';
 
 const Login = () => {
@@ -29,7 +30,7 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await axios.post('http://127.0.0.1:5000/api/auth/login', { username, password });
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, { username, password });
       
       // If admin mode is selected, enforce admin role
       if (loginMode === 'admin' && res.data.role !== 'admin') {

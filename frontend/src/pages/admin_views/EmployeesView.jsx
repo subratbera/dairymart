@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config';
 import axios from 'axios';
 import { Shield, ShieldAlert, Plus, X } from 'lucide-react';
 
@@ -13,7 +14,7 @@ const EmployeesView = () => {
   const fetchEmployees = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://127.0.0.1:5000/api/admin/users', {
+      const res = await axios.get(`${API_BASE_URL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Filter out regular customers so we only see staff/admins
@@ -34,7 +35,7 @@ const EmployeesView = () => {
     if (!window.confirm(`Are you sure you want to change this employee's role to ${newRole}?`)) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://127.0.0.1:5000/api/admin/users/${userId}/role`, 
+      await axios.put(`${API_BASE_URL}/api/admin/users/${userId}/role`, 
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -47,7 +48,7 @@ const EmployeesView = () => {
   const handleUpdateShift = async (userId, newShift) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://127.0.0.1:5000/api/admin/users/${userId}/shift`, 
+      await axios.put(`${API_BASE_URL}/api/admin/users/${userId}/shift`, 
         { shift: newShift },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -62,7 +63,7 @@ const EmployeesView = () => {
     setAddStatus('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://127.0.0.1:5000/api/admin/employees', newStaff, {
+      await axios.post(`${API_BASE_URL}/api/admin/employees`, newStaff, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNewStaff({ username: '', email: '', password: '' });

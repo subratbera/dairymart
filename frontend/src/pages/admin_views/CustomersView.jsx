@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config';
 import axios from 'axios';
 import { UserX, UserCheck, Shield, Mail, Phone, Calendar } from 'lucide-react';
 
@@ -9,7 +10,7 @@ const CustomersView = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://127.0.0.1:5000/api/admin/users', {
+      const res = await axios.get(`${API_BASE_URL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
@@ -27,7 +28,7 @@ const CustomersView = () => {
   const handleToggleBlock = async (userId, currentStatus) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://127.0.0.1:5000/api/admin/users/${userId}/block`, 
+      await axios.put(`${API_BASE_URL}/api/admin/users/${userId}/block`, 
         { is_blocked: !currentStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -41,7 +42,7 @@ const CustomersView = () => {
     if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://127.0.0.1:5000/api/admin/users/${userId}/role`, 
+      await axios.put(`${API_BASE_URL}/api/admin/users/${userId}/role`, 
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );

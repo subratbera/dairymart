@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Users, Package, IndianRupee } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -26,7 +27,7 @@ const AdminDashboard = () => {
     // 1. Fetch AI Demand Predictions
     const token = localStorage.getItem('token');
     
-    axios.get('http://127.0.0.1:5000/api/ai/predict-demand', {
+    axios.get(`${API_BASE_URL}/api/ai/predict-demand`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setDemandData(res.data.predictions))
@@ -46,7 +47,7 @@ const AdminDashboard = () => {
 
     // 2. Fetch Actual Orders Table
     if(token) {
-      axios.get('http://127.0.0.1:5000/api/orders', {
+      axios.get(`${API_BASE_URL}/api/orders`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => {
@@ -76,7 +77,7 @@ const AdminDashboard = () => {
     }
     // 3. Fetch Live Dashboard Stats
     if(token) {
-      axios.get('http://127.0.0.1:5000/api/admin/dashboard-stats', {
+      axios.get(`${API_BASE_URL}/api/admin/dashboard-stats`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => setStats(res.data))

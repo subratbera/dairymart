@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config';
 import axios from 'axios';
 import { Package, AlertTriangle } from 'lucide-react';
 
@@ -10,7 +11,7 @@ const InventoryView = () => {
     const fetchInventory = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://127.0.0.1:5000/api/admin/inventory', {
+        const res = await axios.get(`${API_BASE_URL}/api/admin/inventory`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setInventory(res.data);

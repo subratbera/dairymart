@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Search, Filter, ShoppingCart, Info, Check, ArrowUpDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { API_BASE_URL } from '../config';
 import './Shop.css';
 
 const fallbackProducts = [
@@ -29,7 +30,7 @@ const Shop = () => {
 
   useEffect(() => {
     // Fetch products from our backend
-    axios.get('http://127.0.0.1:5000/api/products')
+    axios.get(`${API_BASE_URL}/api/products`)
       .then(res => {
         if (res.data && res.data.length > 0) {
           setProducts(res.data);

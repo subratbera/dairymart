@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ArrowRight, Star, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { API_BASE_URL } from '../config';
 import './Home.css';
 
 const fallbackRecommendations = [
@@ -20,7 +21,7 @@ const Home = () => {
 
   useEffect(() => {
     // Fetch recommendations from our Flask API
-    axios.get('http://127.0.0.1:5000/api/ai/recommendations')
+    axios.get(`${API_BASE_URL}/api/ai/recommendations`)
       .then(res => {
         if (res.data && res.data.recommendations && res.data.recommendations.length > 0) {
           setRecommendations(res.data.recommendations);

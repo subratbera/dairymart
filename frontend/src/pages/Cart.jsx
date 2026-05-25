@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart, Trash2, ArrowRight, CheckCircle, CreditCard, X, Star } from 'lucide-react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
+import { API_BASE_URL } from '../config';
 import './Cart.css';
 
 const Cart = () => {
@@ -59,7 +60,7 @@ const Cart = () => {
       }));
 
       const token = localStorage.getItem('token');
-      await axios.post('http://127.0.0.1:5000/api/orders', {
+      await axios.post(`${API_BASE_URL}/api/orders`, {
         items: itemsPayload,
         total_amount: total,
         shipping: shippingDetails
@@ -93,7 +94,7 @@ const Cart = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://127.0.0.1:5000/api/reviews', reviewData, {
+      await axios.post(`${API_BASE_URL}/api/reviews`, reviewData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setReviewStatus('Review submitted successfully! Thank you.');

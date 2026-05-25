@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config';
 import axios from 'axios';
 import { Edit2, Trash2, Plus, X } from 'lucide-react';
 import './AdminViews.css'; // Shared CSS for all admin views
@@ -15,7 +16,7 @@ const ProductsView = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:5000/api/products');
+      const res = await axios.get(`${API_BASE_URL}/api/products`);
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -54,9 +55,9 @@ const ProductsView = () => {
 
     try {
       if (editingProduct) {
-        await axios.put(`http://127.0.0.1:5000/api/products/${editingProduct.id}`, payload, { headers });
+        await axios.put(`${API_BASE_URL}/api/products/${editingProduct.id}`, payload, { headers });
       } else {
-        await axios.post('http://127.0.0.1:5000/api/products', payload, { headers });
+        await axios.post(`${API_BASE_URL}/api/products`, payload, { headers });
       }
       fetchProducts();
       handleCloseModal();
@@ -69,7 +70,7 @@ const ProductsView = () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://127.0.0.1:5000/api/products/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchProducts();

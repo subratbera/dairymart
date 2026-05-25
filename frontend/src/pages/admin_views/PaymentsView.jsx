@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config';
 import axios from 'axios';
 import { CreditCard, DollarSign } from 'lucide-react';
 
@@ -10,7 +11,7 @@ const PaymentsView = () => {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://127.0.0.1:5000/api/orders', {
+        const res = await axios.get(`${API_BASE_URL}/api/orders`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         // Sort by newest first

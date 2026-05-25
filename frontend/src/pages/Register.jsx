@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Milk, ArrowRight } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Auth.css';
 
 const Register = () => {
@@ -24,10 +25,10 @@ const Register = () => {
     setIsLoading(true);
     try {
       // Register
-      await axios.post('http://127.0.0.1:5000/api/auth/register', { username, email, password });
+      await axios.post(`${API_BASE_URL}/api/auth/register`, { username, email, password });
       
       // Auto-Login
-      const res = await axios.post('http://127.0.0.1:5000/api/auth/login', { username, password });
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, { username, password });
       localStorage.setItem('token', res.data.access_token);
       localStorage.setItem('role', res.data.role);
       localStorage.setItem('username', res.data.username);

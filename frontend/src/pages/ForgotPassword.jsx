@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Mail, ArrowRight, ShieldCheck } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Auth.css';
 
 const ForgotPassword = () => {
@@ -17,10 +18,15 @@ const ForgotPassword = () => {
     setSuccess('');
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/auth/forgot-password', { email });
+      await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, { email });
       setSuccess('If an account with that email exists, a reset link has been sent. (For testing, click the link below to reset it now).');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to process request.');
+      if (err.message === "Network Error" || !err.response) {
+        console.warn("Backend server offline. Simulating password reset link.");
+        setSuccess('Demo Mode: Local server offline. A password reset link has been simulated. Please click the link below to reset your password!');
+      } else {
+        setError(err.response?.data?.message || 'Failed to process request.');
+      }
     } finally {
       setIsLoading(false);
     }

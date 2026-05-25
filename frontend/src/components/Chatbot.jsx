@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { MessageCircle, X, Send } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Chatbot.css';
 
 const Chatbot = () => {
@@ -19,7 +20,7 @@ const Chatbot = () => {
     setInput('');
 
     try {
-      const res = await axios.post('http://127.0.0.1:5000/api/chat', { message: input });
+      const res = await axios.post(`${API_BASE_URL}/api/chat`, { message: input });
       setMessages(prev => [...prev, { text: res.data.response, isBot: true }]);
     } catch (err) {
       console.warn("Backend chat service offline. Using local intelligent helper.");

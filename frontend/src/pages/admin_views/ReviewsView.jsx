@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config';
 import axios from 'axios';
 import { Star, MessageSquare } from 'lucide-react';
 
@@ -10,7 +11,7 @@ const ReviewsView = () => {
     const fetchReviews = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://127.0.0.1:5000/api/admin/reviews', {
+        const res = await axios.get(`${API_BASE_URL}/api/admin/reviews`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setReviews(res.data);
